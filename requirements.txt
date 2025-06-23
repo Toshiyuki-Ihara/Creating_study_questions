@@ -1,1 +1,10 @@
-
+fastapi
+uvicorn
+python-multipart
+pytesseract
+opencv-python
+Pillow
+pdf2image
+janome
+OpenHowNet
+nltk
