@@ -39,7 +39,7 @@ async def upload_image(file: UploadFile = File(...),type: str = Form(...)):
         if type == "choice":
             quizzes = generate_quizzes_auto(sentences, num_choices=4)
         elif type == "writing":
-            generate_writing_quizzes_auto(sentences)
+            quizzes = generate_writing_quizzes_auto(sentences)
 
         return JSONResponse(content={"success": True, "quizzes": quizzes})
 
