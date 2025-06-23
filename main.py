@@ -34,7 +34,6 @@ async def upload_image(file: UploadFile = File(...),type: str = Form(...)):
         raw_text = extract_text(tmp_path)
         fixed_text = auto_fix_text(raw_text)
         sentences = split_into_sentences(fixed_text)
-        quizzes = generate_quizzes_auto(sentences)
 
         if type == "choice":
             quizzes = generate_quizzes_auto(sentences, num_choices=4)
