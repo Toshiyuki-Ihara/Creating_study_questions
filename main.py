@@ -3,10 +3,9 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 import shutil
-import os
 from tempfile import NamedTemporaryFile
-
-from auto_judgment_lang import extract_text, auto_fix_text, split_into_sentences, generate_quizzes_auto, generate_writing_quizzes_auto
+from auto_judgment_lang import  generate_quizzes_auto, generate_writing_quizzes_auto
+from text_extraction import extract_text,auto_fix_text, split_into_sentences
 
 app = FastAPI()
 
