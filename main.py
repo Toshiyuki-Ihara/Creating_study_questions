@@ -6,12 +6,7 @@ import shutil
 from tempfile import NamedTemporaryFile
 from auto_judgment_lang import  generate_quizzes_auto, generate_writing_quizzes_auto
 from text_extraction import extract_text,auto_fix_text, split_into_sentences
-import OpenHowNet
-import os
 
-if not os.path.exists(os.path.expanduser("~/.openhownet/en_wn_data_v1.json")):
-    print("📥 OpenHowNet辞書をダウンロード中...")
-    OpenHowNet.download()
 
 app = FastAPI()
 
