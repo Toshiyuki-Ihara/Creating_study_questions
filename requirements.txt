@@ -3,7 +3,7 @@ uvicorn
 python-multipart
 pytesseract
 opencv-python
-Pillow
+pillow
 pdf2image
 janome
 OpenHowNet
