@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Request, UploadFile, File, Form
-from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
+from fastapi.responses import HTMLResponse, JSONResponse, FileResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 import shutil
@@ -16,6 +16,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
@@ -43,3 +44,7 @@ async def upload_image(file: UploadFile = File(...),type: str = Form(...)):
 
     except Exception as e:
         return JSONResponse(status_code=400, content={"success": False, "error": str(e)})
+
+@app.api_route("/healthz", methods=["GET", "HEAD"])
+async def health_check():
+    return PlainTextResponse(content="OK", status_code=200)
