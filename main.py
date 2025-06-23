@@ -21,8 +21,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.get("/", response_class=HTMLResponse)
 async def index():
-    with open("static/index.html", encoding="utf-8") as f:
-        return f.read()
+    return FileResponse("static/index.html")
 
 @app.post("/upload")
 async def upload_image(file: UploadFile = File(...),type: str = Form(...)):
