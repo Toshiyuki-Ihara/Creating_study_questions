@@ -1,4 +1,3 @@
-# text_extraction.py
 import re
 import pytesseract
 from PIL import Image
