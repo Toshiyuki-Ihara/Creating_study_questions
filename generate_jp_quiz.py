@@ -1,7 +1,6 @@
 import random
 import OpenHowNet
 from janome.tokenizer import Tokenizer
-import re
 
 hownet = OpenHowNet.HowNetDict()
 tokenizer = Tokenizer()
