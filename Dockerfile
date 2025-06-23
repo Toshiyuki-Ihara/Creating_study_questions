@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 # Python依存パッケージのインストール
-COPY requirements.txt .
+COPY . .
 RUN pip install --no-cache-dir --break-system-packages -r requirements.txt
 
 # アプリケーションコードのコピー
