@@ -1,6 +1,11 @@
 import random
 import OpenHowNet
 from janome.tokenizer import Tokenizer
+import os
+
+if not os.path.exists(os.path.expanduser("~/.openhownet/en_wn_data_v1.json")):
+    print("📥 OpenHowNet辞書をダウンロード中...")
+    OpenHowNet.download()
 
 hownet = OpenHowNet.HowNetDict()
 tokenizer = Tokenizer()
