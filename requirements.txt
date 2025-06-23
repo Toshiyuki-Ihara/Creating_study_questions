@@ -6,5 +6,4 @@ opencv-python
 pillow
 pdf2image
 janome
-OpenHowNet
 nltk
