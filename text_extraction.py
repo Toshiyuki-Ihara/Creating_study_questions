@@ -1,6 +1,5 @@
 import re
 import pytesseract
-from PIL import Image
 from preprocess_img import preprocess_image
 
 def extract_text(image_path):
