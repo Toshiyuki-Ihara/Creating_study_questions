@@ -26,7 +26,7 @@ async def index():
         return f.read()
 
 @app.post("/upload")
-async def upload_image(file: UploadFile = File(...)):
+async def upload_image(file: UploadFile = File(...),type: str = Form(...)):
     try:
         with NamedTemporaryFile(delete=False, suffix=".png") as tmp:
             shutil.copyfileobj(file.file, tmp)
