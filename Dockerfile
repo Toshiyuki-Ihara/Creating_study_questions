@@ -1,7 +1,7 @@
-# Python 3.12 をベースに使用
+# Python 3.12 ベース
 FROM python:3.12-slim
 
-# 必要なシステムパッケージをインストール
+# 必要な OS パッケージのインストール
 RUN apt-get update && apt-get install -y \
     poppler-utils \
     tesseract-ocr \
@@ -11,18 +11,22 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# 作業ディレクトリを作成・移動
+# 作業ディレクトリ
 WORKDIR /app
 
-# Python依存パッケージのインストール
-COPY . .
+# Python依存パッケージをインストール
+COPY requirements.txt .
 RUN pip install --no-cache-dir --break-system-packages -r requirements.txt
 
-# アプリケーションコードのコピー
+# NLTK データを事前にダウンロードして指定パスに保存
+RUN python -m nltk.downloader wordnet omw-1.4 -d /usr/local/nltk_data
+ENV NLTK_DATA=/usr/local/nltk_data
+
+# アプリケーションのコードをコピー
 COPY . .
 
-# FastAPI用のポートを公開
+# ポート公開
 EXPOSE 8000
 
-# アプリケーションの起動コマンド
+# サーバー起動
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
