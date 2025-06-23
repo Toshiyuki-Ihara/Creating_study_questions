@@ -1,6 +1,6 @@
 from generate_jp_quiz import generate_japanese_quizzes,generate_japanese_writing_quizzes
 from generate_eng_quiz import generate_eng_choice_question,generate_eng_writing_question
-from text_extraction import contains_japanese,extract_text,auto_fix_text,split_into_sentences
+from text_extraction import contains_japanese
 
 
 def generate_quizzes_auto(sentences, num_choices=4):
