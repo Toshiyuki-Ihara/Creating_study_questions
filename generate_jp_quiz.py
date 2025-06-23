@@ -1,26 +1,16 @@
 import random
-import OpenHowNet
 from janome.tokenizer import Tokenizer
-import os
+from nltk.corpus import wordnet as wn
 
-if not os.path.exists(os.path.expanduser("~/.openhownet/en_wn_data_v1.json")):
-    print("📥 OpenHowNet辞書をダウンロード中...")
-    OpenHowNet.download()
-
-hownet = OpenHowNet.HowNetDict()
 tokenizer = Tokenizer()
 
 def get_jp_synonyms(word, max_num=3):
-    sememe_infos = hownet.get_sememes_by_word(word)
+    synsets = wn.synsets(word, lang='jpn')
     synonyms = set()
-    for info in sememe_infos:
-        sememe_list = info.get("sememes", [])
-        for sememe in sememe_list:
-            senses = hownet.get_senses_by_sememe(sememe)
-            for sense in senses:
-                candidate = sense.get("word", "")
-                if candidate != word:
-                    synonyms.add(candidate)
+    for syn in synsets:
+        for lemma in syn.lemmas(lang='jpn'):
+            if lemma.name() != word:
+                synonyms.add(lemma.name())
     return list(synonyms)[:max_num]
 
 def generate_japanese_quizzes(sentences, num_choices=4):
