@@ -6,10 +6,6 @@ import shutil
 from tempfile import NamedTemporaryFile
 from auto_judgment_lang import  generate_quizzes_auto, generate_writing_quizzes_auto
 from text_extraction import extract_text,auto_fix_text, split_into_sentences
-import nltk
-
-nltk.download('wordnet')
-nltk.download('omw-1.4')
 
 app = FastAPI()
 
