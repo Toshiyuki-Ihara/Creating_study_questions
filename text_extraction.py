@@ -8,7 +8,9 @@ def extract_text(image_path):
     return pytesseract.image_to_string(image, lang='jpn+eng', config=config)
 
 def auto_fix_text(text):
-    non_empty_lines = [line.strip() for line in text if line.strip()]
+    # Split OCR text into lines before stripping to avoid iterating over
+    # individual characters. Treat empty lines as separators and remove them.
+    non_empty_lines = [line.strip() for line in text.splitlines() if line.strip()]
     joined_sample = ''.join(non_empty_lines)
     is_japanese = re.search(r'[\u3040-\u30FF\u4E00-\u9FFF]', joined_sample)
 
