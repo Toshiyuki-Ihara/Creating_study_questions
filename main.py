@@ -3,6 +3,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 import shutil
+import traceback
 import os
 from tempfile import NamedTemporaryFile
 import uuid
