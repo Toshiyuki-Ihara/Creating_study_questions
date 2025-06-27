@@ -34,7 +34,7 @@ def process_job(job_id, file_path, qtype):
         processed_image = preprocess_image(file_path)
         
         jobs[job_id]["status"] = "extracting"
-        raw_text = extract_text(file_path)
+        raw_text = extract_text(processed_image)
 
         jobs[job_id]["status"] = "fixing"
         fixed_text = auto_fix_text(raw_text)
