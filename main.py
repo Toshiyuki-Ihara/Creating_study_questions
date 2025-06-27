@@ -8,6 +8,7 @@ import uuid
 import threading
 from auto_judgment_lang import generate_quizzes_auto, generate_writing_quizzes_auto
 from text_extraction import extract_text, auto_fix_text, split_into_sentences
+from preprocess_img import preprocess_image
 
 app = FastAPI()
 app.add_middleware(
@@ -29,6 +30,9 @@ async def index():
 # 非同期で問題作成処理を行う
 def process_job(job_id, file_path, qtype):
     try:
+        jobs[job_id]["status"] = "preprocessing"
+        processed_image = preprocess_image(file_path)
+        
         jobs[job_id]["status"] = "extracting"
         raw_text = extract_text(file_path)
 
