@@ -5,6 +5,7 @@ from pdf2image import convert_from_path
 
 def preprocess_image(image_path):
     ext = os.path.splitext(image_path)[-1].lower()
+    temp_files_to_delete = []
 
     if ext == ".pdf":
         try:
@@ -14,6 +15,7 @@ def preprocess_image(image_path):
             pil_image = images[0]
             image_path = "converted_from_pdf.png"
             pil_image.save(image_path)
+            temp_files_to_delete.append(image_path)
         except Exception as e:
             raise RuntimeError(f"PDFの変換に失敗しました: {e}")
 
@@ -24,12 +26,17 @@ def preprocess_image(image_path):
                 image_path = "converted_for_cv2.png"
                 im = im.convert("RGB")
                 im.save(image_path)
+                temp_files_to_delete.append(image_path)
         except Exception as e:
             raise RuntimeError(f"Pillowによる画像変換に失敗しました: {e}")
 
     img = cv2.imread(image_path)
     if img is None:
         raise ValueError("画像が読み込めません。対応形式か確認してください。")
+
+    for f in temp_files_to_delete:
+        if os.path.exists(f):
+            os.remove(f)
 
     height, width = img.shape[:2]
     scale_factor = 200 / 96
