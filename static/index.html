@@ -8,6 +8,32 @@
     .question { margin: 20px 0; }
     .choices button { margin: 5px; }
     .result { margin-top: 10px; font-weight: bold; }
+
+    #loading {
+      display: none;
+      text-align: center;
+      margin: 30px 0;
+    }
+
+    .spinner {
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid #3498db;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 10px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    #loadingText {
+      font-size: 16px;
+      color: #333;
+    }
   </style>
 </head>
 <body>
@@ -17,42 +43,87 @@
     <option value="choice">選択式</option>
     <option value="writing">記述式</option>
   </select>
-  <button onclick="uploadImage()">アップロードして問題生成</button>
+  <button onclick="startProcessing()">アップロードして問題生成</button>
+
+  <div id="loading">
+    <div class="spinner"></div>
+    <div id="loadingText">処理を開始しています...</div>
+  </div>
+
   <div id="quizContainer"></div>
 
   <script>
-    async function uploadImage() {
+    function setLoading(isLoading, message = "") {
+      const loadingDiv = document.getElementById("loading");
+      const loadingText = document.getElementById("loadingText");
+      if (isLoading) {
+        loadingText.textContent = message;
+        loadingDiv.style.display = "block";
+      } else {
+        loadingDiv.style.display = "none";
+      }
+    }
+
+    async function startProcessing() {
       const fileInput = document.getElementById('imageInput');
       const file = fileInput.files[0];
       const type = document.getElementById('quizType').value;
 
       if (!file) {
         alert("画像またはPDFを選択してください。");
-      return;
+        return;
       }
 
       const formData = new FormData();
       formData.append("file", file);
       formData.append("type", type);
 
-      try {
-        const res = await fetch("/upload", {
-          method: "POST",
-          body: formData
-        });
+      setLoading(true, "アップロード中...");
+
+      const res = await fetch("/start_job", {
+        method: "POST",
+        body: formData
+      });
 
       const data = await res.json();
+      const taskId = data.task_id;
 
-        if (!data.success) {
-          alert("エラー: " + data.error);
-        return;
+      pollStatus(taskId, type);
+    }
+
+    async function pollStatus(taskId, type) {
+      const statusMessage = {
+        queued: "待機中です...",
+        extracting: "画像からテキストを抽出中...",
+        fixing: "テキストを整形中...",
+        splitting: "文を分割中...",
+        generating: "問題を生成中...",
+        done: "完了しました！",
+        error: "エラーが発生しました。"
+      };
+
+      const interval = setInterval(async () => {
+        const res = await fetch(`/status/${taskId}`);
+        const data = await res.json();
+
+        const status = data.status;
+        setLoading(true, statusMessage[status] || "処理中...");
+
+        if (status === "done") {
+          clearInterval(interval);
+          setLoading(true, "結果を取得中...");
+          const resultRes = await fetch(`/result/${taskId}`);
+          const resultData = await resultRes.json();
+          setLoading(false);
+          showQuiz(resultData.quizzes, type);
         }
 
-        showQuiz(data.quizzes, type);
-
-      } catch (err) {
-        alert("通信エラーが発生しました: " + err.message);
-      }
+        if (status === "error") {
+          clearInterval(interval);
+          alert("エラーが発生しました。サーバーログを確認してください。");
+          setLoading(false);
+        }
+      }, 2000);
     }
 
     function showQuiz(quizzes, type) {
