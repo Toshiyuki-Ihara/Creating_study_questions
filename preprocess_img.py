@@ -9,7 +9,7 @@ def preprocess_image(image_path):
 
     if ext == ".pdf":
         try:
-            images = convert_from_path(image_path, dpi=300)
+            images = convert_from_path(image_path, dpi=150)
             if not images:
                 raise RuntimeError("PDFから画像が抽出できませんでした。")
             pil_image = images[0]
