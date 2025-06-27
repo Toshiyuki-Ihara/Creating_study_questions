@@ -3,6 +3,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 import shutil
+import os
 from tempfile import NamedTemporaryFile
 import uuid
 import threading
@@ -47,6 +48,7 @@ def process_job(job_id, file_path, qtype):
         jobs[job_id]["status"] = "done"
         jobs[job_id]["result"] = quizzes
     except Exception as e:
+        traceback.print_exc()
         jobs[job_id]["status"] = "error"
         jobs[job_id]["error"] = str(e)
 
@@ -56,7 +58,10 @@ async def start_job(file: UploadFile = File(...), type: str = Form(...)):
     job_id = str(uuid.uuid4())
     jobs[job_id] = {"status": "queued"}
 
-    with NamedTemporaryFile(delete=False, suffix=".png") as tmp:
+    filename = file.filename
+    ext = os.path.splitext(filename)[-1].lower()
+
+    with NamedTemporaryFile(delete=False, suffix=ext) as tmp:
         shutil.copyfileobj(file.file, tmp)
         tmp_path = tmp.name
 
