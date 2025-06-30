@@ -27,9 +27,15 @@ def auto_fix_text(text):
     return fixed
 
 def split_into_sentences(text):
-    pattern = re.compile(r'(.*?[。．.])', re.DOTALL)
-    raw_sentences = pattern.findall(text)
-    return [s.strip() for s in raw_sentences if len(s.strip()) > 2]
+    decimal_pattern = re.compile(r'(?<=\d)\.(?=\d)')
+    temp_text = decimal_pattern.sub('<dot>', text)
+
+    sentence_pattern = re.compile(r'(.*?[。．.])', re.DOTALL)
+    raw_sentences = sentence_pattern.findall(temp_text)
+
+    restored_sentences = [s.replace('<dot>', '.') for s in raw_sentences]
+
+    return [s.strip() for s in restored_sentences if len(s.strip()) > 2]
 
 def contains_japanese(text):
     return re.search(r'[\u3040-\u30FF\u4E00-\u9FFF]', text) is not None
