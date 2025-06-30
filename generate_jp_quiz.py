@@ -11,9 +11,6 @@ def get_synonyms_jp(word, max_num=3):
         for lemma in syn.lemmas(lang='jpn'):
             if lemma.name() != word:
                 synonyms.add(lemma.name())
-    print(f"{word}の類義語一覧----------------")
-    for syn in synonyms:
-        print(syn)
     return list(synonyms)[:max_num]
 
 def get_hypernyms_hyponyms_jp(word, pos=None, max_num=5):
@@ -34,14 +31,6 @@ def get_hypernyms_hyponyms_jp(word, pos=None, max_num=5):
                 if lemma.lang() == 'jpn':
                     hyponyms.add(lemma.name().replace('_', ' '))
 
-    print(f"{word} の上位語 (hypernyms) ----------------")
-    for h in list(hypernyms)[:max_num]:
-        print(h)
-
-    print(f"\n{word} の下位語 (hyponyms) ----------------")
-    for h in list(hyponyms)[:max_num]:
-        print(h)
-
     return list(hypernyms.union(hyponyms))[:max_num]
 
 
@@ -53,10 +42,6 @@ def get_related_words_jp(word, max_num=10, pos=None):
 
     # 2語以上の語を除外
     filtered = [w for w in combined if ' ' not in w]
-
-    print(f"\n{word} の関連語（1単語のみ） ----------------")
-    for r in filtered[:max_num]:
-        print(r)
 
     return filtered[:max_num]
 
