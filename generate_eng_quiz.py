@@ -8,9 +8,6 @@ def get_synonyms_eng(word, max_num=5):
             name = lemma.name().replace('_', ' ')
             if name.lower() != word.lower():
                 synonyms.append(name)
-    print(f"{word}の類義語一覧----------------")
-    for syn in synonyms:
-        print(syn)
     return random.sample(synonyms, min(len(synonyms), max_num))
 
 def get_hypernyms_hyponyms_eng(word, pos=None, max_num=5):
@@ -29,14 +26,6 @@ def get_hypernyms_hyponyms_eng(word, pos=None, max_num=5):
             for lemma in hypo.lemmas():
                 hyponyms.add(lemma.name().replace('_', ' '))
 
-    print(f"{word} の上位語 (hypernyms) ----------------")
-    for h in list(hypernyms)[:max_num]:
-        print(h)
-
-    print(f"\n{word} の下位語 (hyponyms) ----------------")
-    for h in list(hyponyms)[:max_num]:
-        print(h)
-
     return list(hypernyms.union(hyponyms))[:max_num]
 
 
@@ -48,10 +37,6 @@ def get_related_words_eng(word, max_num=10, pos=None):
 
     # 2語以上の語を除外
     filtered = [w for w in combined if ' ' not in w]
-
-    print(f"\n{word} の関連語（1単語のみ） ----------------")
-    for r in filtered[:max_num]:
-        print(r)
 
     return filtered[:max_num]
 
@@ -100,7 +85,7 @@ def generate_eng_writing_question(sentences):
         quiz_list.append({
             "question": question,
             "answer": answer,
-            "type": "writing"  # クライアント側で判別用に追加
+            "type": "writing"  # クライアント側で判別用
         })
 
     return quiz_list
