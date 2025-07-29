@@ -34,9 +34,9 @@
 
 ## フォルダ構成
 
--`main.py` - FastAPI のエンドポイント定義
--`text_extraction.py` - 画像前処理とテキスト抽出・整形
--`generate_jp_quiz.py` - 日本語のクイズ生成ロジック
--`generate_eng_quiz.py` - 英語のクイズ生成ロジック
--`static/` - ブラウザ向け HTML / JavaScript
+- `main.py` - FastAPI のエンドポイント定義
+- `text_extraction.py` - 画像前処理とテキスト抽出・整形
+- `generate_jp_quiz.py` - 日本語のクイズ生成ロジック
+- `generate_eng_quiz.py` - 英語のクイズ生成ロジック
+- `static/` - ブラウザ向け HTML / JavaScript
 
