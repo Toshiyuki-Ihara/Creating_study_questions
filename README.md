@@ -40,3 +40,6 @@
 - `generate_eng_quiz.py` - 英語のクイズ生成ロジック
 - `static/` - ブラウザ向け HTML / JavaScript
 
+## デモ版のURL
+
+https://creating-study-questions.onrender.com
